@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://qa.example.com/api', // URL del servidor de QA
-  jwtTokenKey: 'qa_jwt_token'
+  apiBaseGO: 'http://localhost:3000/api/v1',
+  apiBaseNode: 'http://localhost:3001/api/v1'
 };

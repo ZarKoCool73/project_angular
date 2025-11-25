@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://api.example.com', // URL del servidor de producción
-  jwtTokenKey: 'prod_jwt_token'
+  apiBaseGO: 'http://project_goland:4000',
+  apiBaseNode: 'http://project_nodejs:3000',
 };

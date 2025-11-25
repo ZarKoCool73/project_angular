@@ -5,15 +5,15 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copiamos dependencias primero para usar caché de Docker
+# Copiamos dependencias
 COPY package*.json ./
 RUN npm install
 
-# Copiamos el resto del código
+# Copiamos todo el proyecto
 COPY . .
 
-# Build Angular 18 en modo producción
-RUN npm run build --configuration production
+# Compilar Angular 18 en producción
+RUN npm run build
 
 
 #############################################
@@ -21,11 +21,10 @@ RUN npm run build --configuration production
 #############################################
 FROM nginx:alpine
 
-# Copiar build generado por Angular
-# OJO: Angular 18 genera esto en: dist/<nombre-proyecto>
+# Copiar build real: dist/matrix-app/
 COPY --from=builder /app/dist/matrix-app /usr/share/nginx/html
 
-# Copiar configuración SPA para Angular
+# Configurar Nginx para Angular (SPA)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
