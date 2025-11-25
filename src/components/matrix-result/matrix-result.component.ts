@@ -39,6 +39,7 @@ export class MatrixResultComponent {
       this.sendDataGo(parsedMatrix);
     } catch (e) {
       this.isError = true;
+      this.isLoading = false;
       this.errorMsg = 'Error: la matriz ingresada no es válida';
       console.error('Error al procesar la matriz:', e);
     }
