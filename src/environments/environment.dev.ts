@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiBaseGO: 'http://localhost:3000/api/v1/',
-  apiBaseNode: 'http://localhost:3001/api/v1/'
+  apiBaseGO: 'https://project-goland.onrender.com/api/v1/',
+  apiBaseNode: 'https://project-nodejs-kl5e.onrender.com/api/v1/'
 };
