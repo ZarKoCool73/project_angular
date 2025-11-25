@@ -23,11 +23,12 @@ export class MatrixResultComponent {
   errorMsg!: string;
   isError: boolean = false
   responseData!: ResponseDataNode;
-
+  isLoading = false;
   private readonly goApi = inject(GoApiService);
   private readonly nodeApi = inject(NodeApiService);
 
   submitMatrix() {
+    this.isLoading = true;
     const cleaned = this.matrixStr
       .replaceAll(/\s+/g, '')  // elimina espacios y saltos de línea
       .replaceAll(',]', ']'); // corrige errores comunes
@@ -61,9 +62,11 @@ export class MatrixResultComponent {
       next: (res) => {
         this.responseData = res;
         this.isError = false;
+        this.isLoading = false;
       },
       error: (err: HttpErrorResponse) => {
         this.isError = true
+        this.isLoading = false;
         this.errorMsg = err.error?.error || 'Error en el servidor';
       }
     });

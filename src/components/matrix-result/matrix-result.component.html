@@ -1,5 +1,10 @@
 <!-- Fondo elegante -->
 <div class="matrix-bg min-vh-100 d-flex align-items-center">
+  <!-- ⬅️ INSERTA AQUÍ EL LOADER -->
+  <div class="overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+  </div>
+  <!-- ⬅️ FIN LOADER -->
   <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-12 col-md-10 col-lg-8">
