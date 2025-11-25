@@ -1,21 +1,33 @@
-# Etapa 1: Build
+#############################################
+# Etapa 1: Build Angular 18
+#############################################
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Copiamos dependencias primero para usar caché de Docker
+COPY package*.json ./
 RUN npm install
 
+# Copiamos el resto del código
 COPY . .
-RUN npm run build --prod
 
-# Etapa 2: Serve
+# Build Angular 18 en modo producción
+RUN npm run build --configuration production
+
+
+#############################################
+# Etapa 2: Nginx
+#############################################
 FROM nginx:alpine
 
-# Copia la build de Angular a nginx
+# Copiar build generado por Angular
+# OJO: Angular 18 genera esto en: dist/<nombre-proyecto>
 COPY --from=builder /app/dist/matrix-app /usr/share/nginx/html
 
-# Expone el puerto 80
+# Copiar configuración SPA para Angular
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
