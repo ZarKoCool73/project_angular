@@ -1,0 +1,63 @@
+<!-- Fondo elegante, igual que el login -->
+<div class="matrix-bg min-vh-100 d-flex align-items-center">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+
+        <!-- Card para ingresar matriz -->
+        <div class="card shadow rounded-4 border-0 mb-4">
+          <div class="card-header bg-primary text-white text-center fs-5 fw-bold rounded-top-4">
+            Procesar Matriz
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="matrix" class="form-label">Ingrese la matriz (ej: [[1,2],[3,4]])</label>
+              <textarea
+                id="matrix"
+                [(ngModel)]="matrixStr"
+                rows="5"
+                class="form-control"
+                placeholder="Ej: [[1,2],[3,4]]"
+              ></textarea>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-primary w-100 fw-bold"
+              (click)="submitMatrix()"
+            >
+              Procesar
+            </button>
+
+            <div *ngIf="errorMsg" class="alert alert-danger mt-3 text-center">
+              {{ errorMsg }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Resultados -->
+        <div *ngIf="rotatedMatrix.length">
+
+          <div class="card shadow rounded-4 border-0 mb-3">
+            <div class="card-header bg-secondary text-white text-center fs-6 fw-bold rounded-top-4">
+              Matriz Rotada
+            </div>
+            <div class="card-body p-3 bg-light rounded-bottom-4">
+              <pre class="mb-0">{{ rotatedMatrix | json }}</pre>
+            </div>
+          </div>
+
+          <div class="card shadow rounded-4 border-0">
+            <div class="card-header bg-secondary text-white text-center fs-6 fw-bold rounded-top-4">
+              Estadísticas
+            </div>
+            <div class="card-body p-3 bg-light rounded-bottom-4">
+              <pre class="mb-0">{{ statistics | json }}</pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.matrix-bg {
+  display: block;
+  height: 100vh;
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+textarea {
+  font-family: 'Courier New', monospace;
+  resize: vertical;
+}
+
+pre {
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
