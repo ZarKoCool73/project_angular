@@ -1,20 +1,134 @@
+/* Fondo tipo matrix */
 .matrix-bg {
-  display: block;
-  height: 100vh;
   background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem;
 }
 
-.card {
-  border-radius: 1rem;
+/* CARD global */
+.app-card {
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
-textarea {
-  font-family: 'Courier New', monospace;
-  resize: vertical;
+/* Header */
+.app-card-header {
+  background-color: #1d3557;
+  padding: 1rem;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
-pre {
-  overflow-x: auto;
-  font-size: 0.9rem;
+/* Textarea */
+.app-textarea {
+  resize: none;
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 0.8rem;
+}
+
+/* Secciones */
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Tablas */
+.app-table {
+  font-size: 0.95rem;
+
+  th {
+    width: 50%;
+    background: #f1f1f1;
+    font-weight: 600;
+  }
+
+  td {
+    background: #fafafa;
+  }
+
+  tr {
+    border-color: #ddd;
+  }
+}
+
+/* Listas */
+.app-list {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    background: #f8f9fa;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.6rem;
+    font-size: 0.95rem;
+    border: 1px solid #e5e5e5;
+  }
+}
+
+/* Animaciones */
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVIDAD */
+@media (max-width: 768px) {
+  .app-card {
+    padding: 1rem;
+  }
+
+  .app-card-header {
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .app-table,
+  .app-list li {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para el timestamp */
+.timestamp {
+  font-size: 1.1rem;           /* más grande */
+  color: #ffffff !important;   /* blanco elegante */
+  text-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.4); /* para resaltar en fondos oscuros */
+  font-weight: 500;
+  letter-spacing: 0.03rem;
+  margin-top: 1.5rem;
+  animation: fadeIn 0.8s ease-in-out;
+  text-align: center;
+
+  /* Responsivo */
+  @media (min-width: 768px) {
+    font-size: 1.3rem;   /* ligeramente más grande en tablets */
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 1.4rem;   /* más grande en desktop */
+  }
 }

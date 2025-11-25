@@ -1,60 +1,193 @@
-<!-- Fondo elegante, igual que el login -->
+<!-- Fondo elegante -->
 <div class="matrix-bg min-vh-100 d-flex align-items-center">
   <div class="container py-5">
     <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8">
+      <div class="col-12 col-md-10 col-lg-8">
 
-        <!-- Card para ingresar matriz -->
-        <div class="card shadow rounded-4 border-0 mb-4">
-          <div class="card-header bg-primary text-white text-center fs-5 fw-bold rounded-top-4">
+        <!-- Card ingreso matriz -->
+        <div class="card app-card mb-4">
+          <div class="card-header app-card-header text-center">
             Procesar Matriz
           </div>
-          <div class="card-body">
-            <div class="mb-3">
-              <label for="matrix" class="form-label">Ingrese la matriz (ej: [[1,2],[3,4]])</label>
-              <textarea
-                id="matrix"
-                [(ngModel)]="matrixStr"
-                rows="5"
-                class="form-control"
-                placeholder="Ej: [[1,2],[3,4]]"
-              ></textarea>
-            </div>
 
-            <button
-              type="button"
-              class="btn btn-primary w-100 fw-bold"
-              (click)="submitMatrix()"
-            >
+          <div class="card-body">
+            <label for="matrix" class="form-label fw-semibold">Ingrese la matriz</label>
+            <textarea id="matrix" [(ngModel)]="matrixStr" rows="2"
+                      class="form-control app-textarea"
+                      placeholder="Ej: [[1,2],[3,4]]"></textarea>
+
+            <button class="btn btn-primary w-100 mt-3 fw-bold" (click)="submitMatrix()">
               Procesar
             </button>
 
-            <div *ngIf="errorMsg" class="alert alert-danger mt-3 text-center">
+            <div *ngIf="isError" class="alert alert-danger mt-3 text-center">
               {{ errorMsg }}
             </div>
           </div>
         </div>
 
-        <!-- Resultados -->
-        <div *ngIf="rotatedMatrix.length">
+        <!-- RESULTADOS -->
+        <div *ngIf="responseData">
 
-          <div class="card shadow rounded-4 border-0 mb-3">
-            <div class="card-header bg-secondary text-white text-center fs-6 fw-bold rounded-top-4">
-              Matriz Rotada
+          <!-- Mensaje -->
+          <div class="alert alert-success text-center fw-bold fade-in">
+            {{ responseData.message }}
+          </div>
+
+          <!-- Estadísticas -->
+          <div class="card app-card mb-4">
+            <div class="card-header app-card-header bg-secondary text-white text-center">
+              Estadísticas Generales
             </div>
-            <div class="card-body p-3 bg-light rounded-bottom-4">
-              <pre class="mb-0">{{ rotatedMatrix | json }}</pre>
+
+            <div class="card-body">
+              <h5 class="section-title">📌 Estadísticas básicas</h5>
+              <table class="table app-table">
+                <tbody>
+                <tr>
+                  <th>Máximo</th>
+                  <td>{{ responseData.data.statistics.basic.max }}</td>
+                </tr>
+                <tr>
+                  <th>Mínimo</th>
+                  <td>{{ responseData.data.statistics.basic.min }}</td>
+                </tr>
+                <tr>
+                  <th>Suma</th>
+                  <td>{{ responseData.data.statistics.basic.sum }}</td>
+                </tr>
+                <tr>
+                  <th>Promedio</th>
+                  <td>{{ responseData.data.statistics.basic.average }}</td>
+                </tr>
+                <tr>
+                  <th>Cantidad</th>
+                  <td>{{ responseData.data.statistics.basic.count }}</td>
+                </tr>
+                </tbody>
+              </table>
+
+              <h5 class="section-title mt-4">📊 Estadísticas avanzadas</h5>
+              <table class="table app-table">
+                <tbody>
+                <tr>
+                  <th>Mediana</th>
+                  <td>{{ responseData.data.statistics.advanced.median }}</td>
+                </tr>
+                <tr>
+                  <th>Varianza</th>
+                  <td>{{ responseData.data.statistics.advanced.variance }}</td>
+                </tr>
+                <tr>
+                  <th>Desviación estándar</th>
+                  <td>{{ responseData.data.statistics.advanced.standardDeviation }}</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div class="card shadow rounded-4 border-0">
-            <div class="card-header bg-secondary text-white text-center fs-6 fw-bold rounded-top-4">
-              Estadísticas
+          <!-- Matrices Q y R -->
+          <div class="card app-card mb-4">
+            <div class="card-header app-card-header">
+              Análisis de Matrices (Q y R)
             </div>
-            <div class="card-body p-3 bg-light rounded-bottom-4">
-              <pre class="mb-0">{{ statistics | json }}</pre>
+
+            <div class="card-body">
+              <!-- Q -->
+              <h5 class="section-title">🧩 Matriz Q</h5>
+              <ul class="app-list">
+                <li><b>Dimensiones: </b> {{ responseData.data.matrixAnalysis.matrixQ.dimensions }}</li>
+                <li>
+                  <b>Es cuadrada: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.matrixQ.isSquare || responseData.data.matrixAnalysis.matrixQ.isSquare; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+                <li><b>Es diagonal: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.matrixQ.isDiagonal || responseData.data.matrixAnalysis.matrixQ.isDiagonal; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+                <li><b>Triangular superior: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.matrixQ.isUpperTriangular || responseData.data.matrixAnalysis.matrixQ.isUpperTriangular; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+              </ul>
+
+              <!-- R -->
+              <h5 class="section-title mt-4">🧮 Matriz R</h5>
+              <ul class="app-list">
+                <li><b>Dimensiones:</b> {{ responseData.data.matrixAnalysis.matrixR.dimensions }}</li>
+                <li><b>Es cuadrada: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.matrixR.isSquare || responseData.data.matrixAnalysis.matrixR.isSquare; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+                <li><b>Es diagonal: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.matrixR.isDiagonal || responseData.data.matrixAnalysis.matrixR.isDiagonal; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+                <li><b>Triangular superior: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.matrixR.isUpperTriangular ||responseData.data.matrixAnalysis.matrixR.isUpperTriangular; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+              </ul>
+
+              <h5 class="section-title mt-4">✔ Validaciones</h5>
+              <ul class="app-list">
+                <li><b>Q es ortogonal: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.validations.qIsOrthogonal || responseData.data.matrixAnalysis.validations.qIsOrthogonal; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+                <li><b>R es triangular superior: </b>
+                  <ng-container
+                    *ngIf="responseData.data.matrixAnalysis.validations.rIsUpperTriangular || responseData.data.matrixAnalysis.validations.rIsUpperTriangular; else cross">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  </ng-container>
+                  <ng-template #cross>
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  </ng-template>
+                </li>
+              </ul>
             </div>
           </div>
+
+          <p class="timestamp">
+            Última actualización: {{ responseData.timestamp | date }}
+          </p>
 
         </div>
       </div>

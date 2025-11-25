@@ -1,41 +1,73 @@
 import {Component, inject} from '@angular/core';
-import {Card} from 'primeng/card';
 import {GoApiService} from '../../services/go-api/go-api.service';
 import {NodeApiService} from '../../services/node-api/node-api.service';
 import {FormsModule} from '@angular/forms';
-import {JsonPipe, NgIf} from '@angular/common';
+import {DatePipe, JsonPipe, NgIf} from '@angular/common';
+import {QRResult, RequestDataGo, ResponseDataNode} from '../commons/interfaces/matrix-result.interface';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-matrix-result',
   standalone: true,
   imports: [
-    Card,
     FormsModule,
     NgIf,
     JsonPipe,
+    DatePipe,
   ],
   templateUrl: './matrix-result.component.html',
   styleUrl: './matrix-result.component.scss'
 })
 export class MatrixResultComponent {
 
-  matrixStr = '[[1,2,3],[4,5,6]]';  // entrada como string
-  rotatedMatrix: number[][] = [];
-  statistics: any = null;
-  errorMsg = '';
+  matrixStr!: string;
+  errorMsg!: string;
+  isError: boolean = false
+  responseData!: ResponseDataNode;
 
   private readonly goApi = inject(GoApiService);
   private readonly nodeApi = inject(NodeApiService);
 
   submitMatrix() {
-    this.errorMsg = '';
-    let matrix: number[][];
+    const cleaned = this.matrixStr
+      .replace(/\s+/g, '')  // elimina espacios y saltos de línea
+      .replace(/,\]/g, ']'); // corrige errores comunes
+
+    let parsedMatrix;
     try {
-      matrix = JSON.parse(this.matrixStr);
-    } catch {
-      this.errorMsg = 'Formato de matriz inválido';
+      parsedMatrix = JSON.parse(cleaned);
+      this.sendDataGo(parsedMatrix);
+    } catch (e) {
+      this.isError = true;
+      this.errorMsg = 'Error: la matriz ingresada no es válida';
       return;
     }
+  }
+
+  sendDataGo(body: RequestDataGo) {
+    this.goApi.sendDataGo(body).subscribe({
+      next: (res) => {
+        this.isError = false
+        this.sendDataNode(res)
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isError = true
+        this.errorMsg = err.error?.error || 'Error en el servidor';
+      }
+    });
+  }
+
+  sendDataNode(body: QRResult) {
+    this.nodeApi.sendDataNode(body).subscribe({
+      next: (res) => {
+        this.responseData = res;
+        this.isError = false;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isError = true
+        this.errorMsg = err.error?.error || 'Error en el servidor';
+      }
+    });
   }
 
 }
