@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {GoApiService} from '../../services/go-api/go-api.service';
 import {NodeApiService} from '../../services/node-api/node-api.service';
 import {FormsModule} from '@angular/forms';
-import {DatePipe, JsonPipe, NgIf} from '@angular/common';
+import {DatePipe, NgIf} from '@angular/common';
 import {QRResult, RequestDataGo, ResponseDataNode} from '../commons/interfaces/matrix-result.interface';
 import {HttpErrorResponse} from '@angular/common/http';
 
@@ -12,7 +12,6 @@ import {HttpErrorResponse} from '@angular/common/http';
   imports: [
     FormsModule,
     NgIf,
-    JsonPipe,
     DatePipe,
   ],
   templateUrl: './matrix-result.component.html',
@@ -30,8 +29,8 @@ export class MatrixResultComponent {
 
   submitMatrix() {
     const cleaned = this.matrixStr
-      .replace(/\s+/g, '')  // elimina espacios y saltos de línea
-      .replace(/,\]/g, ']'); // corrige errores comunes
+      .replaceAll(/\s+/g, '')  // elimina espacios y saltos de línea
+      .replaceAll(',]', ']'); // corrige errores comunes
 
     let parsedMatrix;
     try {
@@ -40,7 +39,7 @@ export class MatrixResultComponent {
     } catch (e) {
       this.isError = true;
       this.errorMsg = 'Error: la matriz ingresada no es válida';
-      return;
+      console.error('Error al procesar la matriz:', e);
     }
   }
 
